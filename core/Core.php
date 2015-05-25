@@ -11,7 +11,10 @@ class Core {
 	 */
 	function __construct(array $config = array()) {
 		$this->config = array_merge(
-			array(), $config
+			array(
+				'controllersPath' => dirname(__FILE__) . '/controllers/',
+			),
+			$config
 		);
 	}
 
@@ -22,21 +25,31 @@ class Core {
 	 * @param $uri
 	 */
 	public function handleRequest($uri) {
-		// Массив доступных страниц
-		$pages = array('home', 'test');
 		// Определяем страницу для вывода
-		$page = '';
 		$request = explode('/', $uri);
-		// Если есть - окей, всё верно, используем это имя
-		if (in_array(strtolower($request[0]), $pages)) {
-			$page = strtolower($request[0]);
+		// Имена контроллеров у нас с большой буквы
+		$name = ucfirst($request[0]);
+		// Полный путь до запрошенного контроллера
+		$file = $this->config['controllersPath'] . $name . '.php';
+		// Если нужного контроллера нет, то используем контроллер Home
+		if (!file_exists($file)) {
+			$file = $this->config['controllersPath'] . 'Home.php';
+			// Определяем имя класса, согласно принятым у нас правилам
+			$class = 'Controllers_Home';
 		}
-		// Иначе используем страницу по умолчанию
-		if (empty($page)) {
-			$page = 'home';
+		else {
+			$class = 'Controllers_' . $name;
 		}
+		// Если контроллер еще не был загружен - загружаем его
+		if (!class_exists($class)) {
+			require_once $file;
+		}
+		// И запускаем
+		/** @var Controllers_Home|Controllers_Test $controller */
+		$controller = new $class($this); // Передавая экземпляр текущего класс в него - $this
+		$response = $controller->run();
 
-		echo "Мы выводим страницу <b>{$page}<b>";
+		echo $response;
 	}
 
 }
