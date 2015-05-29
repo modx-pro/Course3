@@ -7,6 +7,19 @@ if (!class_exists('Controller')) {
 class Controllers_Test extends Controller {
 
 	/**
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	public function initialize(array $params = array()) {
+		if (empty($params)) {
+			$this->redirect('/test/');
+		}
+		return true;
+	}
+
+
+	/**
 	 * @return string
 	 */
 	public function run() {

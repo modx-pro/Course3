@@ -28,7 +28,7 @@ class Core {
 		// Определяем страницу для вывода
 		$request = explode('/', $uri);
 		// Имена контроллеров у нас с большой буквы
-		$name = ucfirst($request[0]);
+		$name = ucfirst(array_shift($request));
 		// Полный путь до запрошенного контроллера
 		$file = $this->config['controllersPath'] . $name . '.php';
 		// Если нужного контроллера нет, то используем контроллер Home
@@ -46,8 +46,17 @@ class Core {
 		}
 		// И запускаем
 		/** @var Controllers_Home|Controllers_Test $controller */
-		$controller = new $class($this); // Передавая экземпляр текущего класс в него - $this
-		$response = $controller->run();
+		$controller = new $class($this);
+		$initialize = $controller->initialize($request);
+		if ($initialize === true) {
+			$response = $controller->run();
+		}
+		elseif (is_string($initialize)) {
+			$response = $initialize;
+		}
+		else {
+			$response = 'Возникла неведомая ошибка при загрузке страницы';
+		}
 
 		echo $response;
 	}
