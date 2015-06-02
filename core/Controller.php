@@ -10,7 +10,7 @@ class Controller {
 	 *
 	 * @param Core $core
 	 */
-	function _construct(Core $core) {
+	function __construct(Core $core) {
 		$this->core = $core;
 	}
 
