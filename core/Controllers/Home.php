@@ -26,7 +26,11 @@ class Controllers_Home extends Controller {
 		// Метод getFenom() может вернуть или false, или объект
 		// Так что нужно проверять, что именно приходит
 		if ($fenom = $this->core->getFenom()) {
-			return $fenom->fetch('home.tpl');
+			return $fenom->fetch('home.tpl', array(
+				'pagetitle' => 'Тестовый сайт',
+				'longtitle' => 'Третий курс обучения',
+				'content' => 'Текст главной страницы курса обучения на bezumkin.ru',
+			));
 		}
 		else {
 			return '';

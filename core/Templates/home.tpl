@@ -3,12 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Третий курс обучения на bezumkin.ru</title>
+	<title>{$pagetitle}</title>
 	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 </head>
 <body>
 	<div class="container">
-		<h1>Привет, мир!</h1>
+		<h3>{$longtitle ?: $pagetitle}</h3>
+		{$content}
 	</div>
 </body>
 <footer>
