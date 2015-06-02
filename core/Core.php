@@ -12,7 +12,7 @@ class Core {
 	function __construct(array $config = array()) {
 		$this->config = array_merge(
 			array(
-				'controllersPath' => dirname(__FILE__) . '/controllers/',
+				'controllersPath' => dirname(__FILE__) . '/Controllers/',
 			),
 			$config
 		);
