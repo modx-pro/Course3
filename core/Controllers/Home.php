@@ -23,7 +23,14 @@ class Controllers_Home extends Controller {
 	 * @return string
 	 */
 	public function run() {
-		return "Мы выводим страницу <b>Home<b>";
+		// Метод getFenom() может вернуть или false, или объект
+		// Так что нужно проверять, что именно приходит
+		if ($fenom = $this->core->getFenom()) {
+			return $fenom->fetch('home.tpl');
+		}
+		else {
+			return '';
+		}
 	}
 
 }
