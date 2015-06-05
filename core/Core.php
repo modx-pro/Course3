@@ -19,6 +19,7 @@ class Core {
 				'cachePath' => dirname(__FILE__) . '/Cache/',
 				'fenomOptions' => array(
 					'auto_reload' => true,
+					'force_verify' => true,
 				),
 			),
 			$config

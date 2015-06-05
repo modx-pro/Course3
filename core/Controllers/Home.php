@@ -24,9 +24,9 @@ class Controllers_Home extends Controller {
 	 */
 	public function run() {
 		return $this->template('home', array(
-			'pagetitle' => 'Тестовый сайт',
-			'longtitle' => 'Третий курс обучения',
-			'content' => 'Текст главной страницы курса обучения на bezumkin.ru',
+			'title' => 'Главная страница',
+			'pagetitle' => 'Третий курс обучения',
+			'content' => 'Текст главной страницы',
 		), $this);
 	}
 

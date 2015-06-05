@@ -23,10 +23,10 @@ class Controllers_Test extends Controller {
 	 * @return string
 	 */
 	public function run() {
-		return $this->template('home', array(
+		return $this->template('test', array(
+			'title' => 'Тестовая страница',
 			'pagetitle' => 'Тестовая страница',
-			'longtitle' => '',
-			'content' => 'Текст тестовой страницы курса обучения на bezumkin.ru',
+			'content' => 'Текст тестовой страницы',
 		), $this);
 	}
 
