@@ -147,6 +147,9 @@ class Core {
 	 * @param $level
 	 */
 	public function log($message, $level = E_USER_ERROR) {
+		if (!is_scalar($message)) {
+			$message = print_r($message, true);
+		}
 		trigger_error($message, $level);
 	}
 

@@ -23,16 +23,11 @@ class Controllers_Test extends Controller {
 	 * @return string
 	 */
 	public function run() {
-		if ($fenom = $this->core->getFenom()) {
-			return $fenom->fetch('home.tpl', array(
-				'pagetitle' => 'Тестовая страница',
-				'longtitle' => '',
-				'content' => 'Текст тестовой страницы курса обучения на bezumkin.ru',
-			));
-		}
-		else {
-			return '';
-		}
+		return $this->template('home', array(
+			'pagetitle' => 'Тестовая страница',
+			'longtitle' => '',
+			'content' => 'Текст тестовой страницы курса обучения на bezumkin.ru',
+		), $this);
 	}
 
 }
