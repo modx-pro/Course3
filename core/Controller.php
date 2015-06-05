@@ -3,6 +3,8 @@
 class Controller {
 	/** @var Core $core */
 	public $core;
+	/** @var string $name */
+	public $name = 'home';
 
 
 	/**
@@ -64,6 +66,25 @@ class Controller {
 		}
 
 		return $output;
+	}
+
+
+	/**
+	 * Возвращает пункты меню сайта
+	 *
+	 * @return array
+	 */
+	public function getMenu() {
+		return array(
+			'home' => array(
+				'title' => 'Главная',
+				'link' => '/',
+			),
+			'test' => array(
+				'title' => 'Тестовая',
+				'link' => '/test/',
+			)
+		);
 	}
 
 

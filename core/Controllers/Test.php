@@ -5,6 +5,7 @@ if (!class_exists('Controller')) {
 }
 
 class Controllers_Test extends Controller {
+	public $name = 'test';
 
 	/**
 	 * @param array $params

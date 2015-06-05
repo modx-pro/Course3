@@ -11,6 +11,9 @@
 	{/block}
 </head>
 <body>
+	{block 'navbar'}
+		{include '_navbar.tpl'}
+	{/block}
 	<div class="container">
 		<div class="row">
 			<div class="col-md-10">
