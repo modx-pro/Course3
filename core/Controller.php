@@ -1,5 +1,9 @@
 <?php
 
+namespace Brevis;
+
+use \Exception as Exception;
+
 class Controller {
 	/** @var Core $core */
 	public $core;

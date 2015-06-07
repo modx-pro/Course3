@@ -3,10 +3,8 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', -1);
 
-if (!class_exists('Core')) {
-	require_once 'core/Core.php';
-}
-$Core = new Core();
+require_once dirname(__FILE__) . '/vendor/autoload.php';
+$Core = new \Brevis\Core();
 
 $req = !empty($_REQUEST['q'])
 	? trim($_REQUEST['q'])

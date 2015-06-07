@@ -1,5 +1,10 @@
 <?php
 
+namespace Brevis;
+
+use \Fenom as Fenom;
+use \Exception as Exception;
+
 class Core {
 	public $config = array();
 	/** @var Fenom $fenom */
@@ -14,7 +19,6 @@ class Core {
 	function __construct(array $config = array()) {
 		$this->config = array_merge(
 			array(
-				'controllersPath' => dirname(__FILE__) . '/Controllers/',
 				'templatesPath' => dirname(__FILE__) . '/Templates/',
 				'cachePath' => dirname(__FILE__) . '/Cache/',
 				'fenomOptions' => array(
@@ -24,7 +28,6 @@ class Core {
 			),
 			$config
 		);
-		require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 	}
 
 
@@ -34,28 +37,17 @@ class Core {
 	 * @param $uri
 	 */
 	public function handleRequest($uri) {
-		// Определяем страницу для вывода
 		$request = explode('/', $uri);
-		// Имена контроллеров у нас с большой буквы
-		$name = ucfirst(array_shift($request));
-		// Полный путь до запрошенного контроллера
-		$file = $this->config['controllersPath'] . $name . '.php';
-		// Если нужного контроллера нет, то используем контроллер Home
-		if (!file_exists($file)) {
-			$file = $this->config['controllersPath'] . 'Home.php';
-			// Определяем имя класса, согласно принятым у нас правилам
-			$class = 'Controllers_Home';
+
+		$className = '\Brevis\Controllers\\' . ucfirst(array_shift($request));
+		/** @var Controller $controller */
+		if (!class_exists($className)) {
+			$controller = new Controllers\Home($this);
 		}
 		else {
-			$class = 'Controllers_' . $name;
+			$controller = new $className($this);
 		}
-		// Если контроллер еще не был загружен - загружаем его
-		if (!class_exists($class)) {
-			require_once $file;
-		}
-		// И запускаем
-		/** @var Controllers_Home|Controllers_Test $controller */
-		$controller = new $class($this);
+
 		$initialize = $controller->initialize($request);
 		if ($initialize === true) {
 			$response = $controller->run();

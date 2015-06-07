@@ -1,10 +1,10 @@
 <?php
 
-if (!class_exists('Controller')) {
-	require_once dirname(dirname(__FILE__)) . '/Controller.php';
-}
+namespace Brevis\Controllers;
 
-class Controllers_Test extends Controller {
+use Brevis\Controller as Controller;
+
+class Test extends Controller {
 	public $name = 'test';
 
 	/**
