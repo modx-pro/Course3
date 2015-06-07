@@ -24,6 +24,7 @@ class Core {
 			),
 			$config
 		);
+		require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 	}
 
 
@@ -76,33 +77,19 @@ class Core {
 	 * @return bool|Fenom
 	 */
 	public function getFenom() {
-		// Работаем только, если переменная класса пуста
 		if (!$this->fenom) {
-			// Пробуем загрузить шаблонизатор
-			// Все выброшенные исключения внутри этого блока будут пойманы в следующем
 			try {
-				// Подключаем класс загрузки
-				if (!class_exists('Fenom')) {
-					require 'Fenom.php';
-					// Регистрируем остальные классы его методом
-					Fenom::registerAutoload();
-				}
-				// Проверяем и создаём директорию для кэширования скомпилированных шаблонов
 				if (!file_exists($this->config['cachePath'])) {
 					mkdir($this->config['cachePath']);
 				}
-				// Запускаем Fenom
 				$this->fenom = Fenom::factory($this->config['templatesPath'], $this->config['cachePath'], $this->config['fenomOptions']);
 			}
-			// Ловим исключения, если есть, и отправляем их в лог
 			catch (Exception $e) {
 				$this->log($e->getMessage());
-				// Возвращаем false
 				return false;
 			}
 		}
 
-		// Возвращаем объект Fenom
 		return $this->fenom;
 	}
 
