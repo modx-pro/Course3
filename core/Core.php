@@ -91,32 +91,8 @@ class Core {
 	 *
 	 */
 	public function clearCache() {
-		$this->rmDir($this->config['cachePath']);
+		Core::rmDir($this->config['cachePath']);
 		mkdir($this->config['cachePath']);
-	}
-
-
-	/**
-	 * Рекурсивное удаление директорий
-	 *
-	 * @param $dir
-	 */
-	public function rmDir($dir) {
-		$dir = rtrim($dir, '/');
-		if (is_dir($dir)) {
-			$objects = scandir($dir);
-			foreach ($objects as $object) {
-				if ($object != '.' && $object != '..') {
-					if (is_dir($dir . '/' . $object)) {
-						$this->rmDir($dir . '/' . $object);
-					}
-					else {
-						unlink($dir . '/' . $object);
-					}
-				}
-			}
-			rmdir($dir);
-		}
 	}
 
 
@@ -131,6 +107,61 @@ class Core {
 			$message = print_r($message, true);
 		}
 		trigger_error($message, $level);
+	}
+
+
+	/**
+	 * Удаление ненужных файлов в пакетах, установленных через Composer
+	 *
+	 * @param mixed $base
+	 */
+	public static function cleanPackages($base = '') {
+		if (!is_string($base)) {
+			$base = dirname(dirname(__FILE__)) . '/vendor/';
+		}
+		if ($dirs = @scandir($base)) {
+			foreach ($dirs as $dir) {
+				if (in_array($dir, array('.', '..'))) {
+					continue;
+				}
+				$path = $base . $dir;
+				if (is_dir($path)) {
+					if (in_array($dir, array('tests', 'test', 'docs', 'gui', 'sandbox', 'examples', '.git'))) {
+						Core::rmDir($path);
+					}
+					else {
+						Core::cleanPackages($path . '/');
+					}
+				}
+				elseif (pathinfo($path, PATHINFO_EXTENSION) != 'php') {
+					unlink($path);
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Рекурсивное удаление директорий
+	 *
+	 * @param $dir
+	 */
+	public static function rmDir($dir) {
+		$dir = rtrim($dir, '/');
+		if (is_dir($dir)) {
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != '.' && $object != '..') {
+					if (is_dir($dir . '/' . $object)) {
+						Core::rmDir($dir . '/' . $object);
+					}
+					else {
+						unlink($dir . '/' . $object);
+					}
+				}
+			}
+			rmdir($dir);
+		}
 	}
 
 }
