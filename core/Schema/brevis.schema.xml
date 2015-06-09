@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="Brevis\Model" platform="mysql" defaultEngine="MyISAM" version="3.0">
+
+	<object class="News" table="news" extends="xPDO\Om\xPDOSimpleObject">
+		<field key="pagetitle" dbtype="varchar" phptype="string" precision="100" null="true" default="" />
+		<field key="longtitle" dbtype="varchar" phptype="string" precision="255" null="true" default="" />
+		<field key="text" dbtype="longtext" phptype="string" null="true" default="" />
+		<field key="alias" dbtype="varchar" precision="100" phptype="string" null="true" default="" />
+
+		<index alias="alias" name="alias" primary="false" unique="false" type="BTREE">
+			<column key="alias" length="" collation="A" null="false" />
+		</index>
+	</object>
+
+</model>
