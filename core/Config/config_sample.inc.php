@@ -56,6 +56,14 @@ if (!defined('PROJECT_FENOM_OPTIONS')) {
 	define('PROJECT_FENOM_OPTIONS', \Fenom::AUTO_RELOAD | \Fenom::FORCE_VERIFY);
 }
 
+if (!defined('PROJECT_LOG_LEVEL')) {
+	define('PROJECT_LOG_LEVEL', \xPDO\xPDO::LOG_LEVEL_INFO);
+}
+
+if (!defined('PROJECT_LOG_TARGET')) {
+	define('PROJECT_LOG_TARGET', 'HTML');
+}
+
 $database_options = array(
 	\xPDO\xPDO::OPT_CACHE_PATH => PROJECT_CACHE_PATH,
 	\xPDO\xPDO::OPT_HYDRATE_FIELDS => true,

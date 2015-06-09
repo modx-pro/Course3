@@ -23,14 +23,14 @@ class Core {
 		if (is_string($config)) {
 			$config = dirname(__FILE__) . "/Config/{$config}.inc.php";
 			if (file_exists($config)) {
-				require_once $config;
+				require $config;
 				/** @var string $database_dsn */
 				/** @var string $database_user */
 				/** @var string $database_password */
 				/** @var array $database_options */
 				try {
 					$this->xpdo = new xPDO($database_dsn, $database_user, $database_password, $database_options);
-					$this->xpdo->setPackage(PROJECT_NAME, PROJECT_MODEL_PATH);
+					$this->xpdo->setPackage('Model', PROJECT_CORE_PATH);
 					$this->xpdo->startTime = microtime(true);
 				}
 				catch (Exception $e) {
@@ -44,6 +44,9 @@ class Core {
 		else {
 			exit('Неправильное имя файла конфигурации');
 		}
+
+		$this->xpdo->setLogLevel(defined('PROJECT_LOG_LEVEL') ? PROJECT_LOG_LEVEL : xPDO::LOG_LEVEL_ERROR);
+		$this->xpdo->setLogTarget(defined('PROJECT_LOG_TARGET') ? PROJECT_LOG_TARGET : 'FILE');
 	}
 
 
