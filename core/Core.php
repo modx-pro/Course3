@@ -3,31 +3,47 @@
 namespace Brevis;
 
 use \Fenom as Fenom;
+use \xPDO\xPDO as xPDO;
 use \Exception as Exception;
 
 class Core {
 	public $config = array();
 	/** @var Fenom $fenom */
 	public $fenom;
+	/** @var xPDO $xpdo */
+	public $xpdo;
 
 
 	/**
 	 * Конструктор класса
 	 *
-	 * @param array $config
+	 * @param string $config Имя файла с конфигом
 	 */
-	function __construct(array $config = array()) {
-		$this->config = array_merge(
-			array(
-				'templatesPath' => dirname(__FILE__) . '/Templates/',
-				'cachePath' => dirname(__FILE__) . '/Cache/',
-				'fenomOptions' => array(
-					'auto_reload' => true,
-					'force_verify' => true,
-				),
-			),
-			$config
-		);
+	function __construct($config = 'config') {
+		if (is_string($config)) {
+			$config = dirname(__FILE__) . "/Config/{$config}.inc.php";
+			if (file_exists($config)) {
+				require_once $config;
+				/** @var string $database_dsn */
+				/** @var string $database_user */
+				/** @var string $database_password */
+				/** @var array $database_options */
+				try {
+					$this->xpdo = new xPDO($database_dsn, $database_user, $database_password, $database_options);
+					$this->xpdo->setPackage(PROJECT_NAME, PROJECT_MODEL_PATH);
+					$this->xpdo->startTime = microtime(true);
+				}
+				catch (Exception $e) {
+					exit($e->getMessage());
+				}
+			}
+			else {
+				exit('Не могу загрузить файл конфигурации');
+			}
+		}
+		else {
+			exit('Неправильное имя файла конфигурации');
+		}
 	}
 
 
@@ -71,10 +87,10 @@ class Core {
 	public function getFenom() {
 		if (!$this->fenom) {
 			try {
-				if (!file_exists($this->config['cachePath'])) {
-					mkdir($this->config['cachePath']);
+				if (!file_exists(PROJECT_CACHE_PATH)) {
+					mkdir(PROJECT_CACHE_PATH);
 				}
-				$this->fenom = Fenom::factory($this->config['templatesPath'], $this->config['cachePath'], $this->config['fenomOptions']);
+				$this->fenom = Fenom::factory(PROJECT_TEMPLATES_PATH, PROJECT_CACHE_PATH, PROJECT_FENOM_OPTIONS);
 			}
 			catch (Exception $e) {
 				$this->log($e->getMessage());
@@ -91,8 +107,8 @@ class Core {
 	 *
 	 */
 	public function clearCache() {
-		Core::rmDir($this->config['cachePath']);
-		mkdir($this->config['cachePath']);
+		Core::rmDir(PROJECT_CACHE_PATH);
+		mkdir(PROJECT_CACHE_PATH);
 	}
 
 
