@@ -5,6 +5,7 @@ namespace Brevis;
 use \Fenom as Fenom;
 use \xPDO\xPDO as xPDO;
 use \Exception as Exception;
+use \Parsedown as Parsedown;
 
 class Core {
 	public $config = array();
@@ -12,6 +13,8 @@ class Core {
 	public $fenom;
 	/** @var xPDO $xpdo */
 	public $xpdo;
+	/** @var Parsedown $parser */
+	public $parser;
 
 
 	/**
@@ -102,6 +105,20 @@ class Core {
 		}
 
 		return $this->fenom;
+	}
+
+
+	/**
+	 * Получение парсера текстов
+	 *
+	 * @return Parsedown
+	 */
+	public function getParser() {
+		if (!$this->parser) {
+			$this->parser = new Parsedown();
+		}
+
+		return $this->parser;
 	}
 
 

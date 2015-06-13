@@ -54,7 +54,7 @@ class News extends Controller {
 				'title' => $this->item->get('pagetitle'),
 				'pagetitle' => $this->item->get('pagetitle'),
 				'longtitle' => $this->item->get('longtitle'),
-				'content' => $this->item->get('text'),
+				'content' => $this->core->getParser()->text($this->item->get('text')),
 			);
 		}
 		else {
@@ -91,6 +91,7 @@ class News extends Controller {
 				else {
 					$row['cut'] = false;
 				}
+				$row['text'] = $this->core->getParser()->text($row['text']);
 				$rows[] = $row;
 			}
 		}
