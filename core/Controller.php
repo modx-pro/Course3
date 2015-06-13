@@ -84,6 +84,10 @@ class Controller {
 				'title' => 'Главная',
 				'link' => '/',
 			),
+			'news' => array(
+				'title' => 'Новости',
+				'link' => '/news/',
+			),
 			'test' => array(
 				'title' => 'Тестовая',
 				'link' => '/test/',
