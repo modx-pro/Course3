@@ -3,6 +3,7 @@
 namespace Brevis;
 
 use \Exception as Exception;
+use \Kilte\Pagination\Pagination as Pagination;
 
 class Controller {
 	/** @var Core $core */
@@ -93,6 +94,23 @@ class Controller {
 				'link' => '/test/',
 			)
 		);
+	}
+
+
+	/**
+	 * Возвращает массив с постраничной навигацией
+	 *
+	 * @param $totalItems
+	 * @param int $currentPage
+	 * @param int $itemsPerPage
+	 * @param int $neighbours
+	 *
+	 * @return array
+	 */
+	public function getPagination($totalItems, $currentPage = 1, $itemsPerPage = 10, $neighbours = 2) {
+		$pagination = new Pagination($totalItems, $currentPage, $itemsPerPage, $neighbours);
+
+		return $pagination->build();
 	}
 
 
