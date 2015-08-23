@@ -10,6 +10,8 @@ class Controller {
 	public $core;
 	/** @var string $name */
 	public $name = 'home';
+	/** @var bool $isAjax */
+	public $isAjax = false;
 
 
 	/**
@@ -115,11 +117,18 @@ class Controller {
 
 
 	/**
+	 * Редирект на указанный адрес
+	 *
 	 * @param string $url
 	 */
 	public function redirect($url = '/') {
-		header("Location: {$url}");
-		exit();
+		if ($this->isAjax) {
+			$this->core->ajaxResponse(false, 'Редирект на другой адрес', array('redirect' => $url));
+		}
+		else {
+			header("Location: {$url}");
+			exit();
+		}
 	}
 
 }
