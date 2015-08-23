@@ -6,19 +6,24 @@ if (!oldBrowser) {
 function loadPage(href) {
 	var wrapper = $('#news-wrapper');
 	wrapper.css('opacity', .5);
-	$.get(href, function(res) {
-		wrapper.css('opacity', 1);
-		if (res.success) {
-			$('#news-items').html(res.data['items']);
-			$('#news-pagination').html(res.data['pagination']);
+	$.ajax({
+		dataType: 'json',
+		url: href,
+		cache: false,
+		success: function(res) {
+			wrapper.css('opacity', 1);
+			if (res.success) {
+				$('#news-items').html(res.data['items']);
+				$('#news-pagination').html(res.data['pagination']);
+			}
+			else if (res.data['redirect']) {
+				window.location = res.data['redirect'];
+			}
+			else {
+				console.log(res);
+			}
 		}
-		else if (res.data['redirect']) {
-			window.location = res.data['redirect'];
-		}
-		else {
-			console.log(res);
-		}
-	}, 'json');
+	});
 }
 
 $('#news-wrapper').on('click', '#news-pagination a', function() {
