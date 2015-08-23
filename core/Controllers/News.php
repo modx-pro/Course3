@@ -22,6 +22,9 @@ class News extends Controller {
 		if (empty($params)) {
 			$this->redirect("/{$this->name}/");
 		}
+		elseif ($params[0] === '0') {
+			$this->redirect("/{$this->name}/");
+		}
 		elseif (!empty($params[0])) {
 			if (is_numeric($params[0]) && $params[0] > 1) {
 				if (!isset($params[1]) || !empty($params[1])) {
@@ -37,7 +40,7 @@ class News extends Controller {
 				}
 			}
 
-			if (!$this->_offset && !$this->item) {
+			if (!$this->_offset && !$this->item && !$this->isAjax) {
 				$this->redirect("/{$this->name}/");
 			}
 		}
@@ -50,6 +53,22 @@ class News extends Controller {
 	 * @return string
 	 */
 	public function run() {
+		if ($this->isAjax) {
+			if ($this->item) {
+				$this->core->ajaxResponse(false, 'Контроллер News не принимает ajax в режиме показа отдельной новости');
+			}
+
+			$items = $this->getItems();
+			$pagination = $this->getPagination($this->_total, $this->page, $this->limit);
+			$this->core->ajaxResponse(true, '', array(
+				'items' => $this->template('_news', array('items' => $items), $this),
+				'pagination' => $this->template('_pagination', array('pagination' => $pagination), $this),
+				'total' => $this->_total,
+				'page' => $this->page,
+				'limit' => $this->limit,
+			));
+		}
+
 		if ($this->item) {
 			$data = array(
 				'title' => $this->item->get('pagetitle'),
